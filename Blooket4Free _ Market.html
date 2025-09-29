@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<!-- saved from url=(0032)https://blooket4free.vercel.app/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <title>Blooket4Free | Market</title>
+    <link rel="icon" type="image/x-icon" href="https://blooket4free.vercel.app/assets/misc_images/favicon.ico">
+    <link rel="stylesheet" href="./Blooket4Free _ Market_files/styles.css">
+    <link href="./Blooket4Free _ Market_files/css" rel="stylesheet">
+    <script src="./Blooket4Free _ Market_files/jquery-3.6.0.min.js.download"></script><link type="text/css" rel="stylesheet" id="dark-mode-custom-link"><link type="text/css" rel="stylesheet" id="dark-mode-general-link"><style lang="en" type="text/css" id="dark-mode-custom-style"></style><style lang="en" type="text/css" id="dark-mode-native-style"></style><style lang="en" type="text/css" id="dark-mode-native-sheet"></style>
+    <script src="./Blooket4Free _ Market_files/phaser.js.download"></script>
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+        }
+
+        .bodyContainer {
+            display: flex;
+            left: 0;
+            top: 0;
+        }
+
+        .leftContainer {
+            width: 100%;
+        }
+
+        .scrollWrapper {
+            width: 100%;
+            overflow: auto;
+            padding-bottom: 20px;
+        }
+
+        .packContainer {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, 210px);
+            grid-template-rows: repeat(auto-fill, 210px);
+            grid-gap: 25px;
+            width: 100%;
+            justify-content: center;
+            overflow: visible;
+            padding-bottom: 10px;
+        }
+
+        .pack {
+            width: 210px;
+            height: 210px;
+            cursor: pointer;
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: inset 0 -7px rgb(0 0 0 / 20%), 4px 4px var(--gray-shadow);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: .2s;
+        }
+
+        .pack:hover {
+            transform: scale(.95) translate(-52.5%, -52.5%);
+        }
+
+        .pngContainer {
+            height: 100%;
+            position: relative;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(10deg);
+        }
+
+        .pngBg {
+            width: 70%;
+            filter: brightness(0) invert(100%);
+            opacity: .5;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .pngMain {
+            width: 65%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .title {
+            width: 100%;
+            font-size: calc(2vh + 3vw);
+            height: calc(2vh + 3vw + 10px);
+            font-family: 'Titan One', cursive;
+            text-align: center;
+            color: #fff;
+            margin-bottom: 2vw;
+            margin-top: 1vw;
+            text-shadow: 4px 4px var(--gray-shadow);
+        }
+
+        .packWrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .packWrapper .tooltip {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            background: rgba(34, 34, 34, 0.8);
+            color: #fff;
+            padding: 8px 14px;
+            border-radius: 7px;
+            font-size: 14px;
+            line-height: 18px;
+            text-align: left;
+            transition: opacity 0.2s ease;
+            z-index: 999;
+            white-space: normal;
+            min-width: 230px;
+            bottom: 110%;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+        }
+
+        .packWrapper .tooltip::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -6px;
+            border-width: 6px;
+            border-style: solid;
+            border-color: rgba(34, 34, 34, 0.8) transparent transparent transparent;
+        }
+
+        .packWrapper .tooltip.below {
+            top: 110%;
+            bottom: auto;
+        }
+
+        .packWrapper .tooltip.below::after {
+            top: auto;
+            bottom: 100%;
+            border-color: transparent transparent rgba(34, 34, 34, 0.8) transparent;
+        }
+
+        .packWrapper:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .darkOverlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+
+            z-index: 1;
+        }
+
+        .lockIcon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40%;
+            z-index: 2;
+
+        }
+
+        #sidebar {
+            position: fixed;
+            top: 0;
+            left: -300px;
+
+            height: 100%;
+            width: 300px;
+            transition: left 0.3s ease;
+            z-index: 1005;
+        }
+
+        #sidebar.active {
+            left: 0;
+        }
+
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: none;
+            z-index: 1004;
+        }
+
+        #overlay.active {
+            display: block;
+        }
+
+        .hamburger {
+            position: fixed;
+            top: 35px;
+            left: 25px;
+            font-size: 28px;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            z-index: 1003;
+        }
+
+        .hamburger img {
+            width: 30px;
+
+            height: 30px;
+            filter: drop-shadow(4px 4px var(--gray-shadow));
+            transition: transform 0.2s;
+        }
+
+        .hamburger img:hover {
+            transform: scale(0.95);
+        }
+
+        #closeSidebar {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 22px;
+            cursor: pointer;
+        }
+
+        .Sidebar_logoDesktop__NeFcd {
+            display: block !important;
+            margin: 0 auto 0 !important;
+
+            width: 80% !important;
+        }
+
+        @media (max-width: 625px) {
+            .Sidebar_logoDesktop__NeFcd {
+                margin-top: 20px !important;
+            }
+        }
+
+        #sidebar.Sidebar_sidebar__J7H_G {
+            justify-content: flex-start !important;
+        }
+
+        .blookBgShadow {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50px;
+
+            box-shadow: inset 0 -9px #0003;
+
+            border-bottom-left-radius: calc(0.721vw * 1.15);
+            ;
+            border-bottom-right-radius: calc(0.721vw * 1.15);
+            ;
+            pointer-events: none;
+
+        }
+
+        .packYear {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            height: 24px;
+            padding: 0 12px;
+            background-color: #0003;
+            font-family: Titan One, sans-serif;
+            font-size: 18px;
+            color: #fff;
+            text-shadow: 1px 1px 0 grey;
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+            position: absolute;
+            bottom: 12px;
+            left: 0;
+        }
+
+        .delete-pack-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #0bc2cf;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.2s ease, transform 0.1s ease;
+            z-index: 10;
+            line-height: 1;
+        }
+
+        .delete-pack-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .packWrapper:hover .delete-pack-btn {
+            opacity: 1;
+        }
+
+        .custom-pack-badge {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: #0bc2cf;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: normal;
+            text-transform: uppercase;
+            font-family: 'Titan One', sans-serif;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .uploadBtn {
+            background: var(--purple);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 8px 12px;
+            cursor: pointer;
+            margin: 5px 0;
+            box-shadow: inset 0 -5px rgb(0 0 0 / 20%), 4px 4px var(--gray-shadow);
+            font-weight: normal;
+            font-family: 'Titan One', sans-serif;
+            height: 60px;
+            font-size: 20px;
+            transition: transform 0.2s ease;
+        }
+
+        .uploadBtn:hover {
+            transform: scale(0.95);
+        }
+    </style>
+
+    <link rel="stylesheet" href="./Blooket4Free _ Market_files/121a1462914990a5.css" data-precedence="next">
+    <link rel="stylesheet" href="./Blooket4Free _ Market_files/7d2a7f4491889bcd.css" data-precedence="next">
+    <link rel="stylesheet" href="./Blooket4Free _ Market_files/43cb5a8b08a4fd81.css" data-precedence="next">
+    <link rel="stylesheet" href="./Blooket4Free _ Market_files/a0406186fc01ce56.css" data-precedence="next">
+    <link rel="stylesheet" href="./Blooket4Free _ Market_files/453191536c2b89e6.css" data-precedence="next">
+    <link rel="stylesheet" href="./Blooket4Free _ Market_files/51e88ac748998e08.css" data-precedence="next">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+
+    <nav id="sidebar" class="Sidebar_sidebar__J7H_G">
+        <img alt="Blooket" loading="lazy" width="168" decoding="async" data-nimg="1" class="Sidebar_logoDesktop__NeFcd" src="./Blooket4Free _ Market_files/logo.png">
+        <ul class="Sidebar_list__ljw79">
+            <li>
+                <a class="Sidebar_link__pbkfx" href="https://blooket4free.vercel.app/blooks.html">
+                    <span class="Sidebar_listIcon__rg5X6">
+                        <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="svg-inline--fa fa-suitcase fa-w-16">
+                            <path fill="currentColor" d="M128 480h256V80c0-26.5-21.5-48-48-48H176c-26.5 0-48 21.5-48 48v400zm64-384h128v32H192V96zm320 80v256c0 26.5-21.5 48-48 48h-48V128h48c26.5 0 48 21.5 48 48zM96 480H48c-26.5 0-48-21.5-48-48V176c0-26.5 21.5-48 48-48h48v352z">
+                            </path>
+                        </svg>
+                    </span>
+                    <span class="Sidebar_text__TwkTk">Blooks</span>
+                </a>
+            </li>
+
+            <li>
+                <a class="Sidebar_link__pbkfx" href="https://blooket4free.vercel.app/">
+                    <span class="Sidebar_listIcon__rg5X6">
+                        <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 616 512" class="svg-inline--fa fa-store fa-w-20">
+                            <path fill="currentColor" d="M602 118.6L537.1 15C531.3 5.7 521 0 510 0H106C95 0 84.7 5.7 78.9 15L14 118.6c-33.5 53.5-3.8 127.9 58.8 136.4 4.5.6 9.1.9 13.7.9 29.6 0 55.8-13 73.8-33.1 18 20.1 44.3 33.1 73.8 33.1 29.6 0 55.8-13 73.8-33.1 18 20.1 44.3 33.1 73.8 33.1 29.6 0 55.8-13 73.8-33.1 18.1 20.1 44.3 33.1 73.8 33.1 4.7 0 9.2-.3 13.7-.9 62.8-8.4 92.6-82.8 59-136.4zM529.5 288c-10 0-19.9-1.5-29.5-3.8V384H116v-99.8c-9.6 2.2-19.5 3.8-29.5 3.8-6 0-12.1-.4-18-1.2-5.6-.8-11.1-2.1-16.4-3.6V480c0 17.7 14.3 32 32 32h448c17.7 0 32-14.3 32-32V283.2c-5.4 1.6-10.8 2.9-16.4 3.6-6.1.8-12.1 1.2-18.2 1.2z">
+                            </path>
+                        </svg>
+                    </span>
+                    <span class="Sidebar_text__TwkTk">Market</span>
+                </a>
+            </li>
+
+            <li>
+                <a class="Sidebar_link__pbkfx" href="https://blooket4free.vercel.app/maker.html">
+                    <span class="Sidebar_listIcon__rg5X6" style="scale: 1.2; margin-top: 8px;">
+                        <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="svg-inline--fa fa-store fa-w-20">
+                            <path fill="currentColor" d="M328.41269,285.7436l-39.66604,39.66604c-6.74045,6.74045 -17.67231,6.74045 -24.41283,0l-37.62562,-37.62562c-7.2319,-7.2307 -17.23499,-10.72933 -27.4579,-9.61416c-10.19073,1.11982 -19.19375,6.71398 -24.69935,15.35103c-70.47063,110.55325 -80.77985,120.86374 -84.16789,124.25065c-24.27818,24.28044 -63.82566,24.32878 -88.15445,0c-24.30458,-24.30577 -24.30458,-63.851 0,-88.15445c3.38578,-3.38691 13.69155,-13.69387 124.25059,-84.16909c8.65779,-5.51943 14.26465,-14.52591 15.38214,-24.71198c1.11862,-10.19299 -2.39716,-20.19727 -9.64635,-27.4464l-37.62562,-37.62562c-3.23843,-3.23617 -5.05677,-7.62774 -5.05677,-12.20582c0,-4.57801 1.81946,-8.96851 5.05677,-12.20582l39.66491,-39.66491zM64.61681,355.38332c-9.52786,-9.52892 -24.97676,-9.52892 -34.50568,0c-9.52892,9.52786 -9.52892,24.97676 0,34.50568c9.52786,9.52892 24.97676,9.52892 34.50568,0c9.52892,-9.52892 9.52892,-24.97789 0,-34.50568zM353.92565,260.23176l-194.15848,-194.15841l137.0192,-137.01801c6.74164,-6.74045 17.67231,-6.74045 24.41276,0l17.64013,17.6378c5.07405,5.07518 6.48039,12.75818 3.53081,19.30074l-4.65288,10.32305l9.71656,-4.67815c6.60813,-3.18437 14.50756,-1.8414 19.69551,3.34662l56.19553,56.1956c5.83361,5.83128 6.72436,14.97594 2.12906,21.82457l-36.79818,54.83986l54.47162,-37.02259c6.85209,-4.65634 16.05074,-3.7874 21.90968,2.07154l25.90661,25.90654c6.74164,6.74164 6.74164,17.67231 0,24.41283z">
+                            </path>
+                        </svg>
+                    </span>
+                    <span class="Sidebar_text__TwkTk">Pack Maker</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <div id="overlay"></div>
+
+    <button id="hamburgerBtn" class="hamburger" style="display: block;">
+        <img src="./Blooket4Free _ Market_files/borgor.svg" alt="Menu">
+    </button>
+
+    <div class="_background_l90pt_1" style="background:linear-gradient(#0bc2cf,#349aef)">
+        <div class="_checkers_l90pt_12" style="background-size:1000px"></div>
+    </div>
+
+    <div class="scrollWrapper">
+        <div class="title">Blooket4Free</div>
+        <div class="packContainer" id="packContainer" style="visibility: visible;"><div class="packWrapper"><div class="pack" style="background-image: radial-gradient(circle, rgb(195, 119, 212) 0%, rgb(119, 43, 136) 100%);"><div class="pngContainer"><img src="./Blooket4Free _ Market_files/Lunch_Pack-DWYwdJdz.png" class="pngBg"><img src="./Blooket4Free _ Market_files/Lunch_Pack-DWYwdJdz.png" class="pngMain"></div></div><div class="tooltip below"><strong>Pack Rates:</strong><br>Bananas: 18.75%<br>Watermelon: 18.75%<br>Cheese: 18.75%<br>Doughnut: 18.75%<br>Taco: 7%<br>Bao: 7%<br>Sushi: 7%<br>Cheeseburger: 3.31%<br>Sandwich: 0.65%<br>Half a Sandwich: 0.04%<br></div></div><div class="packWrapper"><div class="pack" style="background-image: radial-gradient(circle, rgb(146, 181, 125) 0%, rgb(65, 96, 57) 100%);"><div class="pngContainer"><img src="./Blooket4Free _ Market_files/Bug_Pack-Cm44315z.png" class="pngBg"><img src="./Blooket4Free _ Market_files/Bug_Pack-Cm44315z.png" class="pngMain"></div></div><div class="tooltip below"><strong>Pack Rates:</strong><br>Ant: 19.625%<br>Rhino Beetle: 19.625%<br>Ladybug: 19.625%<br>Fly: 19.625%<br>Worm: 9%<br>Bee: 9%<br>Mantis: 2.97%<br>Butterfly: 0.5%<br>Blue Butterfly: 0.03%<br></div></div><div class="packWrapper"><div class="pack" style="background-image: radial-gradient(circle, rgb(104, 219, 255) 0%, rgb(12, 153, 198) 100%);"><div class="pngContainer"><img src="./Blooket4Free _ Market_files/d89ce3599c10ed99d41b17fa9579232d.png" class="pngBg"><img src="./Blooket4Free _ Market_files/d89ce3599c10ed99d41b17fa9579232d.png" class="pngMain"></div></div><div class="tooltip below"><strong>Pack Rates:</strong><br>Deckhand: 16%<br>Buccaneer: 16%<br>Swashbuckler: 16%<br>Treasure Map: 16%<br>Seagull: 16%<br>Jolly Pirate: 8%<br>Pirate Ship: 8%<br>Kraken: 3.67%<br>Captain Blackbeard: 0.3%<br>Pirate Pufferfish: 0.03%<br></div></div><div class="packWrapper"><div class="pack" style="background-image: radial-gradient(circle, rgb(240, 137, 65) 0%, rgb(150, 66, 29) 100%);"><div class="pngContainer"><img src="./Blooket4Free _ Market_files/outback_pack.png" class="pngBg"><img src="./Blooket4Free _ Market_files/outback_pack.png" class="pngMain"></div></div><div class="tooltip below"><strong>Pack Rates:</strong><br>Dingo: 18.75%<br>Echidna: 18.75%<br>Koala: 18.75%<br>Kookaburra: 18.75%<br>Platypus: 7%<br>Joey: 7%<br>Kangaroo: 7%<br>Crocadile: 3.6%<br>Sugar Glider: 0.37%<br>Teal Platypus: 0.03%<br></div></div><div class="packWrapper"><div class="pack" style="background-image: radial-gradient(circle, rgb(29, 76, 94) 0%, rgb(0, 52, 73) 100%);"><div class="pngContainer"><img src="./Blooket4Free _ Market_files/ice_monsters_pack.png" class="pngBg"><img src="./Blooket4Free _ Market_files/ice_monsters_pack.png" class="pngMain"></div></div><div class="tooltip below"><strong>Pack Rates:</strong><br>Ice Bat: 19.5%<br>Ice Bug: 19.5%<br>Ice Elemental: 19.5%<br>Rock Monster: 19.5%<br>Dink: 8.5%<br>Donk: 8.5%<br>Bush Monster: 4.5%<br>Yeti: 0.35%<br>Ice Slime: 0.08%<br>Frozen Fossil: 0.05%<br>Ice Crab: 0.02%<br></div></div><div class="packWrapper"><div class="pack" style="background-image: radial-gradient(circle, rgb(160, 189, 65) 0%, rgb(21, 59, 49) 100%);"><div class="pngContainer"><img src="./Blooket4Free _ Market_files/Dino_pack.png" class="pngBg"><img src="./Blooket4Free _ Market_files/Dino_pack.png" class="pngMain"></div></div><div class="tooltip"><strong>Pack Rates:</strong><br>Amber: 19.5%<br>Dino Egg: 19.5%<br>Dino Fossil: 19.5%<br>Stegosaurus: 19.5%<br>Velociraptor: 9%<br>Brontosaurus: 9%<br>Triceratops: 3.7%<br>Tyrannosaurus Rex: 0.3%<br></div></div><div class="packWrapper"><div class="pack" style="background-image: radial-gradient(circle, rgb(0, 204, 255) 0%, rgb(0, 51, 204) 100%);"><div class="pngContainer"><img src="./Blooket4Free _ Market_files/Aquatic_Pack.png" class="pngBg"><img src="./Blooket4Free _ Market_files/Aquatic_Pack.png" class="pngMain"></div></div><div class="tooltip"><strong>Pack Rates:</strong><br>Old Boot: 15%<br>Jellyfish: 15%<br>Clownfish: 15%<br>Frog: 15%<br>Crab: 15%<br>Pufferfish: 6.1%<br>Blobfish: 6.1%<br>Octopus: 6.1%<br>Narwhal: 3%<br>Dolphin: 3%<br>Baby Shark: 0.5%<br>Megalodon: 0.2%<br></div></div><div class="packWrapper"><div class="pack" style="background-image: radial-gradient(circle, rgb(255, 219, 77) 0%, rgb(255, 102, 0) 100%);"><div class="pngContainer"><img src="./Blooket4Free _ Market_files/Safari_Pack.png" class="pngBg"><img src="./Blooket4Free _ Market_files/Safari_Pack.png" class="pngMain"></div></div><div class="tooltip"><strong>Pack Rates:</strong><br>Panda: 15%<br>Sloth: 15%<br>Tenrec: 15%<br>Flamingo: 15%<br>Zebra: 15%<br>Elephant: 7%<br>Lemur: 7%<br>Peacock: 7%<br>Chameleon: 3.48%<br>Lion: 0.5%<br>Rainbow Panda: 0.02%<br></div></div><div class="packWrapper"><div class="pack" style="background-image: radial-gradient(circle, rgb(51, 204, 51) 0%, rgb(45, 134, 89) 100%);"><div class="pngContainer"><img src="./Blooket4Free _ Market_files/Bot_Pack.png" class="pngBg"><img src="./Blooket4Free _ Market_files/Bot_Pack.png" class="pngMain"></div></div><div class="tooltip"><strong>Pack Rates:</strong><br>Lil Bot: 19.5%<br>Lovely Bot: 19.5%<br>Angry Bot: 19.5%<br>Happy Bot: 19.5%<br>Watson: 9%<br>Buddy Bot: 9%<br>Brainy Bot: 3.7%<br>Mega Bot: 0.3%<br></div></div><div class="packWrapper"><div class="pack" style="background-image: radial-gradient(circle, rgb(28, 37, 156) 0%, rgb(7, 0, 40) 100%);"><div class="pngContainer"><img src="./Blooket4Free _ Market_files/Space_Pack.png" class="pngBg"><img src="./Blooket4Free _ Market_files/Space_Pack.png" class="pngMain"></div></div><div class="tooltip"><strong>Pack Rates:</strong><br>Earth: 18.75%<br>Meteor: 18.75%<br>Stars: 18.75%<br>Alien: 18.75%<br>Planet: 10%<br>UFO: 10%<br>Spaceship: 4.5%<br>Astronaut: 0.45%<br>Pink Astronaut: 0.05%<br></div></div><div class="packWrapper"><div class="pack" style="background-image: radial-gradient(circle, rgb(200, 200, 200) 0%, rgb(110, 110, 110) 100%);"><div class="pngContainer"><img src="./Blooket4Free _ Market_files/Medieval_Pack.png" class="pngBg"><img src="./Blooket4Free _ Market_files/Medieval_Pack.png" class="pngMain"></div></div><div class="tooltip"><strong>Pack Rates:</strong><br>Elf: 13.4%<br>Witch: 13.4%<br>Wizard: 13.4%<br>Fairy: 13.4%<br>Slime Monster: 13.4%<br>Jester: 9%<br>Dragon: 9%<br>Queen: 9%<br>Unicorn: 5%<br>King: 1%<br></div></div><div class="packWrapper"><div class="pack" style="background-image: radial-gradient(circle, rgb(0, 170, 255) 0%, rgb(97, 32, 87) 100%);"><div class="pngContainer"><img src="./Blooket4Free _ Market_files/Wonderland_Pack.png" class="pngBg"><img src="./Blooket4Free _ Market_files/Wonderland_Pack.png" class="pngMain"></div></div><div class="tooltip"><strong>Pack Rates:</strong><br>Two of Spades: 15.2%<br>Eat Me: 15%<br>Drink Me: 15%<br>Alice: 15%<br>Queen of Hearts: 15%<br>Dormouse: 6.5%<br>White Rabbit: 6.5%<br>Cheshire Cat: 6.5%<br>Caterpillar: 2.5%<br>Mad Hatter: 2.5%<br>King of Hearts: 0.3%<br></div></div><div class="packWrapper"><div class="pack" style="background-image: radial-gradient(circle, rgb(255, 166, 95) 0%, rgb(193, 85, 35) 100%);"><div class="pngContainer"><img src="./Blooket4Free _ Market_files/Breakfast_Pack.png" class="pngBg"><img src="./Blooket4Free _ Market_files/Breakfast_Pack.png" class="pngMain"></div></div><div class="tooltip"><strong>Pack Rates:</strong><br>Toast: 12.5%<br>Cereal: 12.5%<br>Yogurt: 12.5%<br>Breakfast Combo: 12.5%<br>Orange Juice: 12.5%<br>Milk: 12.5%<br>Waffle: 9%<br>Pancakes: 9%<br>French Toast: 5%<br>Pizza: 2%<br></div></div><div class="packWrapper"><div class="pack" style="background-image: radial-gradient(rgb(82, 82, 82), rgb(26, 26, 26));"><div class="pngContainer"><img src="./Blooket4Free _ Market_files/spooky_pack.png" class="pngBg"><img src="./Blooket4Free _ Market_files/spooky_pack.png" class="pngMain"></div><div class="packYear">2021</div></div><div class="tooltip"><strong>Pack Rates:</strong><br>Pumpkin: 18.5%<br>Swamp Monster: 18.5%<br>Frankenstein: 18.5%<br>Vampire: 18.5%<br>Zombie: 10.125%<br>Mummy: 10.125%<br>Werewolf: 5%<br>Ghost: 0.7%<br>Haunted Pumpkin: 0.05%<br></div></div><div class="packWrapper"><div class="pack" style="background-image: radial-gradient(rgb(82, 82, 82), rgb(26, 26, 26));"><div class="pngContainer"><img src="./Blooket4Free _ Market_files/spooky_pack.png" class="pngBg"><img src="./Blooket4Free _ Market_files/spooky_pack.png" class="pngMain"></div><div class="packYear">2022</div></div><div class="tooltip"><strong>Pack Rates:</strong><br>Pumpkin: 18.5%<br>Swamp Monster: 18.5%<br>Frankenstein: 18.5%<br>Vampire: 18.5%<br>Zombie: 6.7%<br>Mummy: 6.7%<br>Caramel Apple: 6.7%<br>Werewolf: 5.2%<br>Ghost: 0.65%<br>Pumpkin Cookie: 0.03%<br>Ghost Cookie: 0.02%<br></div></div><div class="packWrapper"><div class="pack" style="background-image: radial-gradient(rgb(82, 82, 82), rgb(26, 26, 26));"><div class="pngContainer"><img src="./Blooket4Free _ Market_files/spooky_pack.png" class="pngBg"><img src="./Blooket4Free _ Market_files/spooky_pack.png" class="pngMain"></div><div class="packYear">2023</div></div><div class="tooltip"><strong>Pack Rates:</strong><br>Pumpkin: 19%<br>Swamp Monster: 19%<br>Frankenstein: 19%<br>Vampire: 19%<br>Zombie: 5%<br>Mummy: 5%<br>Caramel Apple: 5%<br>Candy Corn: 5%<br>Werewolf: 3.29%<br>Ghost: 0.65%<br>Red Gummy Bear: 0.02%<br>Blue Gummy Bear: 0.02%<br>Green Gummy Bear: 0.02%<br></div></div><div class="packWrapper"><div class="pack" style="background-image: radial-gradient(rgb(82, 82, 82), rgb(26, 26, 26));"><div class="pngContainer"><img src="./Blooket4Free _ Market_files/spooky_pack.png" class="pngBg"><img src="./Blooket4Free _ Market_files/spooky_pack.png" class="pngMain"></div><div class="packYear">2024</div></div><div class="tooltip"><strong>Pack Rates:</strong><br>Pumpkin: 19%<br>Swamp Monster: 19%<br>Frankenstein: 19%<br>Vampire: 19%<br>Zombie: 4%<br>Mummy: 4%<br>Caramel Apple: 4%<br>Candy Corn: 4%<br>Crow: 4%<br>Werewolf: 3.29%<br>Ghost: 0.65%<br>Red Gummy Bear: 0.02%<br>Blue Gummy Bear: 0.02%<br>Green Gummy Bear: 0.02%<br></div></div><div class="packWrapper"><div class="pack" style="background-image: radial-gradient(circle, rgb(233, 185, 28) 0%, rgb(190, 71, 27) 100%);"><div class="pngContainer"><img src="./Blooket4Free _ Market_files/Autumn_Pack-C5VMbtyO.png" class="pngBg"><img src="./Blooket4Free _ Market_files/Autumn_Pack-C5VMbtyO.png" class="pngMain"></div><div class="packYear">2024</div></div><div class="tooltip"><strong>Pack Rates:</strong><br>Black Bear: 19.5%<br>Pumpkin Pie: 19.5%<br>Chipmunk: 19.5%<br>Cornucopia: 19.5%<br>Autumn Cat: 9%<br>Pumpkin Puppy: 9%<br>Autumn Crow: 2.95%<br>Turkey: 1%<br>Golden Pumpkin Pie: 0.05%<br></div></div><div class="packWrapper"><div class="pack" style="background-image: radial-gradient(circle, rgb(255, 255, 255) 0%, rgb(80, 172, 225) 100%);"><div class="pngContainer"><img src="./Blooket4Free _ Market_files/blizzard_pack_2.png" class="pngBg"><img src="./Blooket4Free _ Market_files/blizzard_pack_2.png" class="pngMain"></div><div class="packYear">2021</div></div><div class="tooltip"><strong>Pack Rates:</strong><br>Snow Globe: 14.5%<br>Holiday Gift: 14.5%<br>Hot Chocolate: 14.5%<br>Holiday Wreath: 14.5%<br>Stocking: 14.5%<br>Gingerbread Man: 7.1%<br>Gingerbread House: 7.1%<br>Reindeer: 7.1%<br>Snowman: 5.15%<br>Santa Claus: 1%<br>Frost Wreath: 0.03%<br>Tropical Globe: 0.02%<br></div></div><div class="packWrapper"><div class="pack" style="background-image: radial-gradient(circle, rgb(255, 255, 255) 0%, rgb(80, 172, 225) 100%);"><div class="pngContainer"><img src="./Blooket4Free _ Market_files/blizzard_pack_2.png" class="pngBg"><img src="./Blooket4Free _ Market_files/blizzard_pack_2.png" class="pngMain"></div><div class="packYear">2022</div></div><div class="tooltip"><strong>Pack Rates:</strong><br>Snow Globe: 14.5%<br>Holiday Gift: 14.5%<br>Hot Chocolate: 14.5%<br>Holiday Wreath: 14.5%<br>Stocking: 14.5%<br>Gingerbread Man: 7.1%<br>Gingerbread House: 7.1%<br>Reindeer: 7.1%<br>Snowman: 5.15%<br>Santa Claus: 1%<br>New York Snow Globe: 0.05%<br></div></div><div class="packWrapper"><div class="pack" style="background-image: radial-gradient(circle, rgb(255, 255, 255) 0%, rgb(80, 172, 225) 100%);"><div class="pngContainer"><img src="./Blooket4Free _ Market_files/blizzard_pack_2.png" class="pngBg"><img src="./Blooket4Free _ Market_files/blizzard_pack_2.png" class="pngMain"></div><div class="packYear">2023</div></div><div class="tooltip"><strong>Pack Rates:</strong><br>Snow Globe: 14.5%<br>Holiday Gift: 14.5%<br>Hot Chocolate: 14.5%<br>Holiday Wreath: 14.5%<br>Stocking: 14.5%<br>Gingerbread Man: 7.1%<br>Gingerbread House: 7.1%<br>Reindeer: 7.1%<br>Snowman: 5.15%<br>Santa Claus: 1%<br>Red Sweater Snowman: 0.02%<br>Blue Sweater Snowman: 0.02%<br>Elf Sweater Snowman: 0.01%<br></div></div><div class="packWrapper"><div class="pack" style="background-image: radial-gradient(circle, rgb(255, 255, 255) 0%, rgb(80, 172, 225) 100%);"><div class="pngContainer"><img src="./Blooket4Free _ Market_files/blizzard_pack_2.png" class="pngBg"><img src="./Blooket4Free _ Market_files/blizzard_pack_2.png" class="pngMain"></div><div class="packYear">2024</div></div><div class="tooltip"><strong>Pack Rates:</strong><br>Snow Globe: 14.5%<br>Holiday Gift: 14.5%<br>Hot Chocolate: 14.5%<br>Holiday Wreath: 14.5%<br>Stocking: 14.5%<br>Gingerbread Man: 7.1%<br>Gingerbread House: 7.1%<br>Reindeer: 7.1%<br>Snowman: 5.15%<br>Santa Claus: 1%<br>Holiday Elf: 0.03%<br>Cozy Baby Penguin: 0.02%<br></div></div><div class="packWrapper"><div class="pack" style="background-image: radial-gradient(circle, rgb(11, 194, 207) 0%, rgb(52, 154, 239) 100%);"><div class="pngContainer"><img src="./Blooket4Free _ Market_files/farm-full.png" class="pngBg"><img src="./Blooket4Free _ Market_files/farm-full.png" class="pngMain"></div></div><div class="tooltip"><strong>Pack Rates:</strong><br>Chick: 11.111111%<br>Chicken: 11.111111%<br>Cow: 11.111111%<br>Goat: 11.111111%<br>Horse: 11.111111%<br>Pig: 11.111111%<br>Sheep: 11.111111%<br>Duck: 11.111111%<br>Alpaca: 11.111111%<br></div></div><div class="packWrapper"><div class="pack" style="background-image: radial-gradient(circle, rgb(11, 194, 207) 0%, rgb(52, 154, 239) 100%);"><div class="pngContainer"><img src="./Blooket4Free _ Market_files/pet-full.png" class="pngBg"><img src="./Blooket4Free _ Market_files/pet-full.png" class="pngMain"></div></div><div class="tooltip"><strong>Pack Rates:</strong><br>Dog: 12.5%<br>Cat: 12.5%<br>Rabbit: 12.5%<br>Goldfish: 12.5%<br>Hamster: 12.5%<br>Turtle: 12.5%<br>Kitten: 12.5%<br>Puppy: 12.5%<br></div></div><div class="packWrapper"><div class="pack" style="background-image: radial-gradient(circle, rgb(11, 194, 207) 0%, rgb(52, 154, 239) 100%);"><div class="pngContainer"><img src="./Blooket4Free _ Market_files/forest-full.png" class="pngBg"><img src="./Blooket4Free _ Market_files/forest-full.png" class="pngMain"></div></div><div class="tooltip"><strong>Pack Rates:</strong><br>Bear: 10%<br>Moose: 10%<br>Fox: 10%<br>Raccoon: 10%<br>Squirrel: 10%<br>Owl: 10%<br>Hedgehog: 10%<br>Deer: 10%<br>Wolf: 10%<br>Beaver: 10%<br></div></div><div class="packWrapper"><div class="pack" style="background-image: radial-gradient(circle, rgb(11, 194, 207) 0%, rgb(52, 154, 239) 100%);"><div class="pngContainer"><img src="./Blooket4Free _ Market_files/tropical-full.png" class="pngBg"><img src="./Blooket4Free _ Market_files/tropical-full.png" class="pngMain"></div></div><div class="tooltip"><strong>Pack Rates:</strong><br>Tiger: 7.142857%<br>Orangutan: 7.142857%<br>Cockatoo: 7.142857%<br>Parrot: 7.142857%<br>Anaconda: 7.142857%<br>Jaguar: 7.142857%<br>Macaw: 7.142857%<br>Toucan: 7.142857%<br>Panther: 7.142857%<br>Capuchin: 7.142857%<br>Gorilla: 7.142857%<br>Hippo: 7.142857%<br>Rhino: 7.142857%<br>Giraffe: 7.142857%<br></div></div><div class="packWrapper"><div class="pack" style="background-image: radial-gradient(circle, rgb(11, 194, 207) 0%, rgb(52, 154, 239) 100%);"><div class="pngContainer"><img src="./Blooket4Free _ Market_files/arctic-full.png" class="pngBg"><img src="./Blooket4Free _ Market_files/arctic-full.png" class="pngMain"></div></div><div class="tooltip"><strong>Pack Rates:</strong><br>Snowy Owl: 12.5%<br>Polar Bear: 12.5%<br>Arctic Fox: 12.5%<br>Baby Penguin: 12.5%<br>Penguin: 12.5%<br>Arctic Hare: 12.5%<br>Seal: 12.5%<br>Walrus: 12.5%<br></div></div><div class="packWrapper"><div class="pack" style="background-image: radial-gradient(circle, rgb(52, 154, 239) 0%, rgb(255, 0, 114) 100%);"><div class="pngContainer"><img src="./Blooket4Free _ Market_files/misc-full.png" class="pngBg"><img src="./Blooket4Free _ Market_files/misc-full.png" class="pngMain"></div><div class="custom-pack-badge">Custom</div><div class="delete-pack-btn" title="Delete custom pack"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times" class="svg-inline--fa fa-times fa-w-11" viewBox="0 0 352 512" xmlns="http://www.w3.org/2000/svg" style="width: 16px; height: 16px;">
+                <path fill="currentColor" d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"></path>
+            </svg></div></div><div class="tooltip"><strong>Pack Rates:</strong><br>Light Blue: 1.20481927711%<br>Black: 1.20481927711%<br>Red: 1.20481927711%<br>Purple: 1.20481927711%<br>Pink: 1.20481927711%<br>Orange: 1.20481927711%<br>Lime: 1.20481927711%<br>Green: 1.20481927711%<br>Teal: 1.20481927711%<br>Tan: 1.20481927711%<br>Maroon: 1.20481927711%<br>Gray: 1.20481927711%<br>Mint: 1.20481927711%<br>Salmon: 1.20481927711%<br>Burgandy: 1.20481927711%<br>Baby Blue: 1.20481927711%<br>Dust: 1.20481927711%<br>Brown: 1.20481927711%<br>Dull Blue: 1.20481927711%<br>Yellow: 1.20481927711%<br>Blue: 1.20481927711%<br>White: 1.20481927711%<br>Agent Owl: 1.20481927711%<br>Party Pig: 1.20481927711%<br>GO NUTS SQUIRREL: 1.20481927711%<br>Red Slime Monster: 1.20481927711%<br>Light Slime Monster: 1.20481927711%<br>Dark Slime Monster: 1.20481927711%<br>Fire Dragon: 1.20481927711%<br>Wind Dragon: 1.20481927711%<br>Lightning Wizard: 1.20481927711%<br>Crazy Unicorn: 1.20481927711%<br>Uni-CORN: 1.20481927711%<br>Enchanted Elf: 1.20481927711%<br>Master Elf: 1.20481927711%<br>Phantom King: 1.20481927711%<br>Lime Astronaut: 1.20481927711%<br>Cyan Astronaut: 1.20481927711%<br>Blue Astronaut: 1.20481927711%<br>Purple Astronaut: 1.20481927711%<br>Rainbow Astronaut: 1.20481927711%<br>Tim the Alien: 1.20481927711%<br>Rainbow Jellyfish: 1.20481927711%<br>Blizzard Clownfish: 1.20481927711%<br>Poison Dart Frog: 1.20481927711%<br>Lemon Crab: 1.20481927711%<br>Donut Blobfish: 1.20481927711%<br>Crimson Octopus: 1.20481927711%<br>Rainbow Narwhal: 1.20481927711%<br>Tiger Zebra: 1.20481927711%<br>White Peacock: 1.20481927711%<br>Chick Chicken: 1.20481927711%<br>Chicken Chick: 1.20481927711%<br>Raccoon Bandit: 1.20481927711%<br>Owl Sheriff: 1.20481927711%<br>Vampire Frog: 1.20481927711%<br>Pumpkin King: 1.20481927711%<br>Anaconda Wizard: 1.20481927711%<br>Spooky Pumpkin: 1.20481927711%<br>Spooky Mummy: 1.20481927711%<br>Spooky Ghost: 1.20481927711%<br>Santa Claws: 1.20481927711%<br>Cookies Combo: 1.20481927711%<br>Chilly Flamingo: 1.20481927711%<br>Snowy Bush Monster: 1.20481927711%<br>Nutcracker Koala: 1.20481927711%<br>Hamsta Claus: 1.20481927711%<br>Lovely Frog: 1.20481927711%<br>Lovely Planet: 1.20481927711%<br>Lovely Peacock: 1.20481927711%<br>Lovely Fox: 1.20481927711%<br>Lovely Rabbit: 1.20481927711%<br>Lucky Frog: 1.20481927711%<br>Lucky Hamster: 1.20481927711%<br>Leprechaun: 1.20481927711%<br>Lucky Bee: 1.20481927711%<br>Spring Frog: 1.20481927711%<br>Chocolate Rabbit: 1.20481927711%<br>Spring Rabbit: 1.20481927711%<br>Spring Deer: 1.20481927711%<br>Wise Caterpillar: 1.20481927711%<br>Wise Owl: 1.20481927711%<br>Mark: 1.20481927711%<br></div></div></div>
+        <div style="height: 15px;"></div>
+
+        <div style="text-align:center; margin: 30px;">
+            <input type="file" id="bpkUpload" accept=".bpk,application/json" style="display:none;">
+            <button id="uploadBtn" class="uploadBtn">
+                Load Custom Pack
+            </button>
+        </div>
+    </div>
+
+    <div id="unlockScreen" style="display: none;">
+        <div id="background" class="styles__openBackground___-U4oX-camelCase" style="background: radial-gradient(circle, rgb(104, 219, 255) 0%, rgb(12, 153, 198) 100%);">
+            <img id="cornerIcon" alt="Icon" class="styles__cornerIcon___24o3Z-camelCase" draggable="false" src="./Blooket4Free _ Market_files/Nav_Icon_Pirate-ew8qi374.svg">
+            <div id="phaser-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:-1;"></div>
+            <div class="styles__openContainer___3paFG-camelCase">
+                <img id="blookBg" loading="lazy" class="styles__blookBackground___3rt4N-camelCase" draggable="false" src="./Blooket4Free _ Market_files/Highlighted_Background_Pirate-CrD0PKuQ.svg">
+                <div class="styles__bottomShadow___10ZLG-camelCase"></div>
+                <div class="styles__blookContainer___36LK2-camelCase styles__unlockedBlookImage___wC4gr-camelCase">
+                    <img id="unlockImg" draggable="false" class="styles__blook___1R6So-camelCase" src="./Blooket4Free _ Market_files/swashbuckler.svg">
+                </div>
+                <div class="styles__unlockedText___1diat-camelCase">
+                    <div class="styles__unlockedBlook___2pr1Z-camelCase">
+                        <div id="unlockName" style="font-family: &quot;Titan One&quot;; font-size: 2vw;">Swashbuckler</div>
+                    </div>
+                    <div id="unlockRarity" class="styles__rarityText___1PfSA-camelCase" style="color: rgb(46, 204, 64);">Uncommon</div>
+                </div>
+                <div id="unlockChance" class="styles__bottomText___3_k10-camelCase">16%</div>
+            </div>
+
+            <div class="styles__openPackContainer___2m4Yf-camelCase">
+                <div>
+                    <img class="styles__packImage___1jX3J-camelCase" id="packBottom" src="./Blooket4Free _ Market_files/PiratePackBottom-BZOz9aW_.png">
+                    <div class="styles__openPack___3QxCP-camelCase" style="background-image: url(&quot;https://blacket.org/content/packSeelOpen.webp&quot;); display: block;"></div>
+                </div>
+            </div>
+
+            <div class="styles__openBigButton___3KmDM-camelCase styles__canOpen___2znG2-camelCase" role="button" tabindex="0"></div>
+        </div>
+    </div>
+
+    <script src="./Blooket4Free _ Market_files/packdata.js.download"></script>
+    <script src="./Blooket4Free _ Market_files/seasonalpackdata.js.download"></script>
+    <script src="./Blooket4Free _ Market_files/freepackdata.js.download"></script>
+
+    <script src="./Blooket4Free _ Market_files/indexed-db.js.download"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            if (window.matchMedia("(max-width: 625px)").matches) {
+                alert("Hello! This website is not at all made for mobile devices. For the best experience, go open this on a computer. \n \n(If you are on a computer and see this message, just rezise the window.)");
+            }
+        });
+
+
+        let currentResult = null;
+        let currentPack = null;
+        let opened = false;
+
+        function rarityColor(rarity) {
+            if (rarity == "Uncommon") return "#2ecc40";
+            if (rarity == "Rare") return "rgb(10,20,250)";
+            if (rarity == "Epic") return "rgb(190,0,0)";
+            if (rarity == "Legendary") return "rgb(255,145,15)";
+            if (rarity == "Chroma") return "rgb(0,204,255)";
+            if (rarity == "Mystical") return "rgb(163,53,238)";
+            if (rarity == "Unique") return "teal";
+            return "#fff";
+        }
+
+        function rollBlook(pack) {
+            const roll = Math.random() * 100;
+            let cumulative = 0, index = 0;
+            for (let i = 0; i < pack.chance.length; i++) {
+                cumulative += pack.chance[i];
+                if (roll <= cumulative) { index = i; break; }
+            }
+            return {
+                name: pack.blook[index],
+                rarity: pack.rarity[index],
+                svg: pack.svg[index],
+                chance: pack.chance[index]
+            };
+        }
+
+        function showUnlock(result, pack) {
+            currentResult = result;
+            currentPack = pack;
+            opened = false;
+
+            document.getElementById("unlockName").innerText = result.name.replace(/_custom$/, "");
+            document.getElementById("unlockRarity").innerText = result.rarity;
+            document.getElementById("unlockRarity").style.color = rarityColor(result.rarity);
+            document.getElementById("unlockImg").src = result.svg;
+
+            let stored = JSON.parse(localStorage.getItem("blooksCollection")) || {};
+            let count = stored[result.name] || 0;
+
+            if (count === 0) {
+                document.getElementById("unlockChance").innerText = result.chance + "% - NEW!";
+            } else {
+                document.getElementById("unlockChance").innerText = result.chance + "%";
+            }
+
+            // Get index of rolled blook
+            const idx = pack.blook.indexOf(result.name);
+
+            // Helper to choose array-or-single value
+            const pickAsset = (val) => {
+                if (Array.isArray(val)) {
+                    return val[idx] ?? val[0]; // pick matching index or fallback to first
+                }
+                return val;
+            };
+
+            // Apply logic to all assets
+            document.getElementById("background").style.background = pickAsset(pack.bg);
+            document.getElementById("blookBg").src = pickAsset(pack.blookBackground);
+            document.getElementById("cornerIcon").src = pickAsset(pack.cornerIcon);
+            document.getElementById("packBottom").src = pickAsset(pack.packBottom);
+
+            const unlockNameElement = document.getElementById("unlockName");
+            const unlockContainer = document.querySelector(".styles__unlockedBlook___2pr1Z-camelCase");
+
+            setTimeout(() => {
+                resizeTextToFit(unlockNameElement, unlockContainer);
+            }, 10);
+
+            const openContainer = document.querySelector(".styles__openContainer___3paFG-camelCase");
+            if (openContainer) openContainer.className = "styles__openContainer___3paFG-camelCase";
+
+            const packDiv = document.querySelector(".styles__openPack___3QxCP-camelCase");
+            if (packDiv) {
+                packDiv.style.display = "block";
+                packDiv.className = "styles__openPack___3QxCP-camelCase";
+            }
+
+            document.getElementById("unlockScreen").style.display = "block";
+            document.getElementById("hamburgerBtn").style.display = "none";
+        }
+
+
+        function closeUnlock() {
+            document.getElementById("unlockScreen").style.display = "none";
+            document.getElementById("packContainer").style.visibility = "visible";
+            document.getElementById("hamburgerBtn").style.display = "block";
+            currentResult = null;
+            currentPack = null;
+            opened = false;
+
+            const unlockNameElement = document.getElementById("unlockName");
+            unlockNameElement.style.fontSize = "2vw";
+
+            const pack = document.querySelector(".styles__openPack___3QxCP-camelCase");
+            if (pack) {
+                pack.style.display = "block";
+                pack.classList.remove(
+                    "styles__isOpeningPack___1qY5t-camelCase"
+                );
+            }
+
+            const packBottom = document.querySelector(".styles__packImage___1jX3J-camelCase");
+            if (packBottom) {
+                packBottom.classList.remove("styles__wigglingPackBottom___4F3d2-camelCase");
+            }
+
+            const packContainer = document.querySelector(".styles__openPackContainer___2m4Yf-camelCase");
+            if (packContainer) {
+                packContainer.classList.remove("styles__openingPackContainer___1ZQzY-camelCase");
+            }
+
+            const openContainer = document.querySelector(".styles__openContainer___3paFG-camelCase");
+            if (openContainer) {
+                openContainer.className = "styles__openContainer___3paFG-camelCase";
+            }
+
+            const background = document.getElementById("background");
+            if (background) {
+                background.classList.remove("styles__openBackgroundActive___3WzzZ-camelCase");
+            }
+
+            document.getElementById("phaser-canvas").innerHTML = "";
+        }
+
+        function playOpenAnimation(rarity) {
+            const pack = document.querySelector(".styles__openPack___3QxCP-camelCase");
+            const packContainer = document.querySelector(".styles__openPackContainer___2m4Yf-camelCase");
+            const openContainer = document.querySelector(".styles__openContainer___3paFG-camelCase");
+            const background = document.getElementById("background");
+            const packBottom = document.querySelector(".styles__packImage___1jX3J-camelCase");
+
+            if (!pack || !packContainer || !openContainer || !packBottom) return;
+
+            pack.classList.add("styles__isOpeningPack___1qY5t-camelCase");
+            packBottom.classList.add("styles__wigglingPackBottom___4F3d2-camelCase");
+
+            pack.addEventListener("animationend", () => {
+
+                pack.style.display = "none";
+                packContainer.classList.add("styles__openingPackContainer___1ZQzY-camelCase");
+                openContainer.className = "styles__openContainer___3paFG-camelCase";
+                if (rarity === "common") openContainer.classList.add("styles__openingContainer___2OmG9-camelCase");
+                if (rarity === "uncommon") openContainer.classList.add("styles__openingContainer___2OmG9-camelCase");
+                if (rarity === "rare") openContainer.classList.add("styles__openingContainer___2OmG9-camelCase");
+                if (rarity === "epic") openContainer.classList.add("styles__openingContainerEpic___3TzCR-camelCase");
+                if (rarity === "legendary") openContainer.classList.add("styles__openingContainerLegendary___RbJZ_-camelCase");
+                if (rarity === "chroma") openContainer.classList.add("styles__openingContainerChroma___3VBd5-camelCase");
+                if (rarity === "mystical") openContainer.classList.add("styles__openingContainerChroma___3VBd5-camelCase");
+                if (rarity === "unique") openContainer.classList.add("styles__openingContainerChroma___3VBd5-camelCase");
+                if (background) background.classList.add("styles__openBackgroundActive___3WzzZ-camelCase");
+
+                setTimeout(() => {
+                    document.getElementById("phaser-canvas").innerHTML = "";
+                    startParticle(rarity);
+                }, 1);
+
+                setTimeout(() => {
+                    opened = true;
+                }, 400);
+            }, { once: true });
+        }
+
+        document.getElementById("background").addEventListener("click", (e) => {
+            if (opened) {
+                closeUnlock();
+            }
+        });
+
+        window.addEventListener('resize', () => {
+            if (currentResult && document.getElementById("unlockScreen").style.display !== "none") {
+                const unlockNameElement = document.getElementById("unlockName");
+                const unlockContainer = document.querySelector(".styles__unlockedBlook___2pr1Z-camelCase");
+                setTimeout(() => {
+                    resizeTextToFit(unlockNameElement, unlockContainer);
+                }, 100);
+            }
+        });
+
+        function rotateArray(arr, times) {
+            const n = arr.length;
+            const shift = times % n;
+            return arr.slice(shift).concat(arr.slice(0, shift));
+        }
+
+        let debugOffset = 0;
+
+        function getDaysSinceRef() {
+            const refDate = new Date("2025-09-15T00:00:00Z");
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            return Math.floor((today - refDate) / (1000 * 60 * 60 * 24)) + debugOffset;
+        }
+
+        function processPacks(packs) {
+            return packs.map(pack => {
+
+                if (pack.colorBlook && pack.colorBlook.length > 0) {
+                    let newPack = { ...pack };
+
+                    newPack.blook = [...newPack.blook];
+                    newPack.rarity = [...newPack.rarity];
+                    newPack.svg = [...newPack.svg];
+                    newPack.chance = [...newPack.chance];
+
+                    const idx = getDaysSinceRef() % pack.colorBlook.length;
+
+                    const last = newPack.blook.length - 1;
+                    newPack.blook[last] = pack.colorBlook[idx];
+                    if (pack.colorRarity) newPack.rarity[last] = pack.colorRarity[idx];
+                    if (pack.colorSvg) newPack.svg[last] = pack.colorSvg[idx];
+                    if (pack.colorChance) newPack.chance[last] = pack.colorChance[idx];
+
+                    return newPack;
+                }
+
+                return pack;
+            });
+        }
+
+        $(document).ready(function () {
+            renderPacks();
+        });
+
+        function renderPacks() {
+
+            let allPacks = packData.concat(seasonalPackData).concat(freePackData);
+
+            allPacks = processPacks(allPacks);
+
+            const firstAsset = (val) => Array.isArray(val) ? val[0] : val;
+
+            for (let i = 0; i < allPacks.length; i++) {
+                const wrapper = document.createElement("div");
+                wrapper.classList.add("packWrapper");
+
+                const newPack = document.createElement("div");
+                newPack.classList.add("pack");
+                newPack.style.backgroundImage = firstAsset(allPacks[i].bg);
+                wrapper.appendChild(newPack);
+
+                const pngContainer = document.createElement("div");
+                pngContainer.classList.add('pngContainer');
+                newPack.appendChild(pngContainer);
+
+                const pngBg = document.createElement("img");
+                pngBg.src = firstAsset(allPacks[i].png);
+                pngBg.classList.add('pngBg');
+                pngContainer.appendChild(pngBg);
+
+                const pngMain = document.createElement("img");
+                pngMain.src = firstAsset(allPacks[i].png);
+                pngMain.classList.add('pngMain');
+                pngContainer.appendChild(pngMain);
+
+                if (allPacks[i].year) {
+                    const packBottomDiv = document.createElement("div");
+                    packBottomDiv.classList.add("packYear");
+                    packBottomDiv.innerText = allPacks[i].year;
+                    newPack.appendChild(packBottomDiv);
+                }
+
+                const tooltip = document.createElement("div");
+                tooltip.classList.add("tooltip");
+
+                if (allPacks[i].comingSoon) {
+                    tooltip.innerHTML = "Coming Soon";
+
+                    const overlay = document.createElement("div");
+                    overlay.classList.add("darkOverlay");
+                    newPack.appendChild(overlay);
+
+                    const lock = document.createElement("img");
+                    lock.src = "./assets/misc_images/lock.svg";
+                    lock.classList.add("lockIcon");
+                    newPack.appendChild(lock);
+
+                } else {
+                    let tooltipHtml = "<strong>Pack Rates:</strong><br>";
+                    for (let j = 0; j < allPacks[i].blook.length; j++) {
+                        let displayName = allPacks[i].blook[j].replace(/_custom$/, "");
+                        tooltipHtml += `${displayName}: ${allPacks[i].chance[j]}%<br>`;
+                    }
+                    tooltip.innerHTML = tooltipHtml;
+
+                    newPack.addEventListener("click", function () {
+                        const result = rollBlook(allPacks[i]);
+                        document.getElementById("packContainer").style.visibility = "hidden";
+                        showUnlock(result, allPacks[i]);
+                    });
+
+                    document.getElementById("packContainer").appendChild(wrapper);
+                }
+
+                wrapper.appendChild(tooltip);
+
+                wrapper.addEventListener("mouseenter", () => {
+                    const rect = wrapper.getBoundingClientRect();
+                    if (rect.top < 200) {
+                        tooltip.classList.add("below");
+                    } else {
+                        tooltip.classList.remove("below");
+                    }
+                });
+            }
+        };
+
+        const openButton = document.querySelector(".styles__openBigButton___3KmDM-camelCase");
+        if (openButton) {
+            openButton.addEventListener("click", () => {
+                if (currentResult) {
+                    playOpenAnimation(currentResult.rarity.toLowerCase());
+                }
+            });
+        }
+
+        function resizeTextToFit(textElement) {
+
+            let fontSizeVW = 2.5;
+            textElement.style.fontSize = fontSizeVW + 'vw';
+
+            const container = textElement.parentElement;
+            const maxWidth = container.offsetWidth * 0.95;
+            const maxHeight = container.offsetHeight * 0.9;
+
+            let computedSize = parseFloat(window.getComputedStyle(textElement).fontSize);
+
+            while (textElement.scrollWidth > maxWidth || textElement.scrollHeight > maxHeight) {
+                fontSizeVW -= 0.01;
+                textElement.style.fontSize = fontSizeVW + 'vw';
+                computedSize = parseFloat(window.getComputedStyle(textElement).fontSize);
+            }
+
+            if (fontSizeVW < 0) {
+                fontSizeVW = 2;
+                textElement.style.fontSize = fontSizeVW + 'vw';
+            }
+
+            if (window.innerWidth <= 625) {
+                fontSizeVW = fontSizeVW * 2.525;
+                textElement.style.fontSize = fontSizeVW + 'vw';
+            }
+        }
+
+    </script>
+
+    <script>
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+
+        function openSidebar() {
+            sidebar.classList.add('active');
+            overlay.classList.add('active');
+        }
+
+        function closeSidebarMenu() {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+        }
+
+        hamburgerBtn.addEventListener('click', openSidebar);
+        overlay.addEventListener('click', closeSidebarMenu);
+    </script>
+
+    <script>
+
+        function initBlooksStorage(allBlooks) {
+            let stored = JSON.parse(localStorage.getItem("blooksCollection")) || {};
+
+            allBlooks.forEach(blook => {
+                if (!(blook in stored)) {
+                    stored[blook] = 0;
+                }
+            });
+
+            localStorage.setItem("blooksCollection", JSON.stringify(stored));
+        }
+
+        function addBlookToStorage(blookName) {
+            let stored = JSON.parse(localStorage.getItem("blooksCollection")) || {};
+
+            if (!(blookName in stored)) {
+                stored[blookName] = 0;
+            }
+
+            stored[blookName] += 1;
+
+            localStorage.setItem("blooksCollection", JSON.stringify(stored));
+        }
+
+        function getAllBlooks() {
+            let all = [];
+            const packs = packData.concat(freePackData).concat(seasonalPackData);
+
+            packs.forEach(pack => {
+
+                let packBlooks = [...pack.blook];
+
+                if (pack.colorBlook && pack.colorBlook.length > 0) {
+                    packBlooks.pop();
+
+                    packBlooks = packBlooks.concat(pack.colorBlook);
+                }
+
+                all = all.concat(packBlooks);
+            });
+
+            return [...new Set(all)];
+        }
+
+        initBlooksStorage(getAllBlooks());
+
+        const originalShowUnlock = showUnlock;
+        showUnlock = function (result, pack) {
+
+            originalShowUnlock(result, pack);
+
+            addBlookToStorage(result.name);
+        };
+
+        let lastCheckedDay = getDaysSinceRef();
+
+        function checkForDayChange() {
+            const currentDay = getDaysSinceRef();
+            if (currentDay !== lastCheckedDay) {
+                lastCheckedDay = currentDay;
+                document.getElementById("packContainer").innerHTML = "";
+                document.getElementById("comingSoonContainer").innerHTML = "";
+                renderPacks();
+            }
+        }
+
+        setInterval(checkForDayChange, 60000);
+
+        document.addEventListener('visibilitychange', function () {
+            if (!document.hidden) {
+                checkForDayChange();
+            }
+        });
+    </script>
+
+    <script src="./Blooket4Free _ Market_files/particles.js.download"></script>
+
+    <script>
+        window.addEventListener('beforeunload', function (e) {
+            e.preventDefault();
+            e.returnValue = '';
+        });
+    </script>
+
+    <script>
+        function ensureAllBlooksInStorage() {
+            let stored = JSON.parse(localStorage.getItem("blooksCollection")) || {};
+            let updated = false;
+
+            const defaultPacks = packData.concat(seasonalPackData).concat(freePackData);
+
+            defaultPacks.forEach(pack => {
+                let packBlooks = [...pack.blook];
+
+                if (pack.colorBlook && pack.colorBlook.length > 0) {
+                    packBlooks.pop();
+                    packBlooks = packBlooks.concat(pack.colorBlook);
+                }
+
+                packBlooks.forEach(blookName => {
+                    if (!(blookName in stored)) {
+                        stored[blookName] = 0;
+                        updated = true;
+                    }
+                });
+            });
+
+            if (updated) {
+                localStorage.setItem("blooksCollection", JSON.stringify(stored));
+            }
+
+            return stored;
+        }
+
+        async function loadCustomPacks() {
+            try {
+                return await packDB.loadCustomPacks();
+            } catch (error) {
+                console.error('Error loading custom packs:', error);
+                return [];
+            }
+        }
+
+        async function saveCustomPacks(packs) {
+            try {
+                await packDB.saveCustomPacks(packs);
+            } catch (error) {
+                console.error('Error saving custom packs:', error);
+            }
+        }
+
+        async function getAllPacks() {
+            let allPacks = packData.concat(seasonalPackData).concat(freePackData);
+            const customPacks = await loadCustomPacks();
+            return allPacks.concat(customPacks);
+        }
+
+        document.getElementById("uploadBtn").addEventListener("click", () => {
+            document.getElementById("bpkUpload").click();
+        });
+
+        document.getElementById("bpkUpload").addEventListener("change", async (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = async function (e) {
+                try {
+                    let text = e.target.result;
+
+                    if (text.startsWith("data:")) {
+                        const base64 = text.split(",")[1];
+                        text = atob(base64);
+                    }
+
+                    text = text.replace(/^\uFEFF/, "");
+
+                    let newPack = JSON.parse(text);
+
+                    ["blook", "rarity", "chance", "svg"].forEach(key => {
+                        if (!Array.isArray(newPack[key])) newPack[key] = [];
+                    });
+
+                    let stored = ensureAllBlooksInStorage();
+
+                    newPack.blook = newPack.blook.map(name => name + "_custom");
+
+                    if (Array.isArray(newPack.colorBlook)) {
+                        newPack.colorBlook = newPack.colorBlook.map(name => name + "_custom");
+                    }
+
+                    newPack.blook.forEach(b => {
+                        if (!(b in stored)) stored[b] = 0;
+                    });
+
+                    if (Array.isArray(newPack.colorBlook)) {
+                        newPack.colorBlook.forEach(b => {
+                            if (!(b in stored)) stored[b] = 0;
+                        });
+                    }
+
+                    localStorage.setItem("blooksCollection", JSON.stringify(stored));
+
+                    await packDB.addCustomPack(newPack);
+
+                    document.getElementById("packContainer").innerHTML = "";
+                    await renderPacksAsync();
+
+                    event.target.value = '';
+
+                } catch (err) {
+                    alert("Invalid .bpk file: " + err.message);
+                }
+            };
+            reader.readAsText(file);
+        });
+
+        async function renderPacksAsync() {
+            let allPacks = await getAllPacks();
+            allPacks = processPacks(allPacks);
+
+            document.getElementById("packContainer").innerHTML = "";
+
+            const defaultPacksCount = packData.length + seasonalPackData.length + freePackData.length;
+
+            const firstAsset = (val) => Array.isArray(val) ? val[0] : val;
+
+            for (let i = 0; i < allPacks.length; i++) {
+                const wrapper = document.createElement("div");
+                wrapper.classList.add("packWrapper");
+
+                const newPack = document.createElement("div");
+                newPack.classList.add("pack");
+                newPack.style.backgroundImage = firstAsset(allPacks[i].bg);
+                wrapper.appendChild(newPack);
+
+                const pngContainer = document.createElement("div");
+                pngContainer.classList.add('pngContainer');
+                newPack.appendChild(pngContainer);
+
+                const pngBg = document.createElement("img");
+                pngBg.src = firstAsset(allPacks[i].png);
+                pngBg.classList.add('pngBg');
+                pngContainer.appendChild(pngBg);
+
+                const pngMain = document.createElement("img");
+                pngMain.src = firstAsset(allPacks[i].png);
+                pngMain.classList.add('pngMain');
+                pngContainer.appendChild(pngMain);
+
+                if (allPacks[i].year) {
+                    const packBottomDiv = document.createElement("div");
+                    packBottomDiv.classList.add("packYear");
+                    packBottomDiv.innerText = allPacks[i].year;
+                    newPack.appendChild(packBottomDiv);
+                }
+
+                if (i >= defaultPacksCount) {
+                    const customPackIndex = i - defaultPacksCount;
+
+                    const badge = document.createElement('div');
+                    badge.className = 'custom-pack-badge';
+                    badge.textContent = 'Custom';
+                    newPack.appendChild(badge);
+
+                    const deleteBtn = document.createElement('div');
+                    deleteBtn.className = 'delete-pack-btn';
+                    deleteBtn.innerHTML = `<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times" class="svg-inline--fa fa-times fa-w-11" viewBox="0 0 352 512" xmlns="http://www.w3.org/2000/svg" style="width: 16px; height: 16px;">
+                <path fill="currentColor" d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"></path>
+            </svg>`;
+                    deleteBtn.title = 'Delete custom pack';
+
+                    deleteBtn.addEventListener('click', async (e) => {
+                        e.stopPropagation();
+
+                        if (confirm('Delete this custom pack? This cannot be undone.')) {
+                            await packDB.deleteCustomPack(customPackIndex);
+                            document.getElementById("packContainer").innerHTML = "";
+                            await renderPacksAsync();
+                        }
+                    });
+
+                    newPack.appendChild(deleteBtn);
+                }
+
+                const tooltip = document.createElement("div");
+                tooltip.classList.add("tooltip");
+
+                if (allPacks[i].comingSoon) {
+                    tooltip.innerHTML = "Coming Soon";
+
+                    const overlay = document.createElement("div");
+                    overlay.classList.add("darkOverlay");
+                    newPack.appendChild(overlay);
+
+                    const lock = document.createElement("img");
+                    lock.src = "./assets/misc_images/lock.svg";
+                    lock.classList.add("lockIcon");
+                    newPack.appendChild(lock);
+
+                } else {
+                    let tooltipHtml = "<strong>Pack Rates:</strong><br>";
+                    for (let j = 0; j < allPacks[i].blook.length; j++) {
+                        let displayName = allPacks[i].blook[j].replace(/_custom$/, "");
+                        tooltipHtml += `${displayName}: ${allPacks[i].chance[j]}%<br>`;
+                    }
+                    tooltip.innerHTML = tooltipHtml;
+
+                    newPack.addEventListener("click", function () {
+                        const result = rollBlook(allPacks[i]);
+                        document.getElementById("packContainer").style.visibility = "hidden";
+                        showUnlock(result, allPacks[i]);
+                    });
+
+                    document.getElementById("packContainer").appendChild(wrapper);
+                }
+
+                wrapper.appendChild(tooltip);
+
+                wrapper.addEventListener("mouseenter", () => {
+                    const rect = wrapper.getBoundingClientRect();
+                    if (rect.top < 200) {
+                        tooltip.classList.add("below");
+                    } else {
+                        tooltip.classList.remove("below");
+                    }
+                });
+            }
+        }
+
+        function checkForDayChange() {
+            const currentDay = getDaysSinceRef();
+            if (currentDay !== lastCheckedDay) {
+                lastCheckedDay = currentDay;
+                document.getElementById("packContainer").innerHTML = "";
+                renderPacksAsync();
+            }
+        }
+
+        $(document).ready(async function () {
+            await renderPacksAsync();
+        });
+    </script>
+
+
+
+</body></html>
